@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/saurabhpawal/Desktop/internet health monitor/client/output/client'
+relocations:     []
+...
