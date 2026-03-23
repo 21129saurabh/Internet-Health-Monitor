@@ -35,7 +35,7 @@ const redIcon = new L.Icon({
   iconAnchor: [17, 35],
 });
 
-const socket = io("http://localhost:3000");
+const socket = io("https://internet-health-monitor.onrender.com");
 
 function App() {
   const [data, setData] = useState([]);
