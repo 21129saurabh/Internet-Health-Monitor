@@ -35,7 +35,11 @@ const redIcon = new L.Icon({
   iconAnchor: [17, 35],
 });
 
-const socket = io("https://internet-health-monitor.onrender.com");
+// Use environment variable for backend URL
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+// Socket.io connection
+const socket = io(BACKEND_URL);
 
 function App() {
   const [data, setData] = useState([]);
@@ -59,6 +63,19 @@ function App() {
   }, []);
 
   const latest = data[data.length - 1];
+
+  // Helper to post metrics (if needed)
+  const postMetrics = async (metrics) => {
+    try {
+      await fetch(`${BACKEND_URL}/metrics`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(metrics),
+      });
+    } catch (err) {
+      console.error("Error posting metrics:", err);
+    }
+  };
 
   return (
     <div className="app">
