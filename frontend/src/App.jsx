@@ -48,12 +48,14 @@ function App() {
     socket.on("network-update", (msg) => {
       const newData = {
         time: new Date().toLocaleTimeString(),
-        latency: msg.latency,
-        packet_loss: msg.packet_loss,
-        latency_google: msg.latency_google,
-        latency_cf: msg.latency_cf,
-        outage: msg.outage,
-        location: msg.location
+        latency: msg?.latency ?? 0,
+        packet_loss: msg?.packet_loss ?? 0,
+        latency_google: msg?.latency_google ?? 0,
+        latency_cf: msg?.latency_cf ?? 0,
+        outage: msg?.outage ?? false,
+        location: (msg?.location?.lat && msg?.location?.lon)
+          ? msg.location
+          : { lat: 12.97, lon: 77.59, city: "Fallback (Bangalore)" }
       };
 
       setData((prev) => [...prev.slice(-20), newData]);
@@ -116,8 +118,8 @@ function App() {
               <XAxis dataKey="time" stroke="#94a3b8" />
               <YAxis stroke="#94a3b8" />
               <Tooltip />
-              <Line type="monotone" dataKey="latency" stroke="#ef4444" strokeWidth={3}/>
-              <Line type="monotone" dataKey="packet_loss" stroke="#3b82f6" strokeWidth={3}/>
+              <Line type="monotone" dataKey="latency" stroke="#ef4444" strokeWidth={3} />
+              <Line type="monotone" dataKey="packet_loss" stroke="#3b82f6" strokeWidth={3} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -129,7 +131,7 @@ function App() {
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
             {data.map((d, i) => {
-              if (!d.location) return null;
+              if (!d.location?.lat || !d.location?.lon) return null;
 
               return (
                 <Marker
