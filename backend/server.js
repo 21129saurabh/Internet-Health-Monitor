@@ -9,8 +9,7 @@ const app = express();
 const server = http.createServer(app);
 
 const io = socketIo(server, {
-  cors: { origin: "*" },
-});
+  cors: { origin: "*" }});
 
 app.use(cors());
 app.use(express.json());
